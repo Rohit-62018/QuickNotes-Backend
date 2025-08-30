@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import  User  from "../Models/user"; 
+import  { User }   from "../Models/user"; 
 
 // Signup
 export const signup = async (req: Request, res: Response) => {
@@ -55,11 +55,16 @@ export const login = async (req: Request, res: Response) => {
       process.env.JWT_SECRET!,
       { expiresIn: "24h" }
     );
+    res.cookie("token", token, {
+      httpOnly: true,  
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict", 
+      maxAge: 24 * 60 * 60 * 1000 
+    });
 
     return res.status(200).json({
       message: "Login successful",
       success: true,
-      token,
       email: user.email,
       name: user.name,
     });
