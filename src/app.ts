@@ -73,8 +73,13 @@ app.get("/notes", isAuthenticated, async (req: AuthRequest, res: Response) => {
     return res.status(201).json({
       message: "Note created ",
       success: true,
-      notes:userWithNotes?.notes
+      user:{
+        notes:userWithNotes?.notes,
+        email:req.user.email,
+        name:userWithNotes?.name
+      }
     });
+    
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error", success: false });
