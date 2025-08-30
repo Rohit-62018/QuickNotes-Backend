@@ -33,8 +33,7 @@ app.get("/", (req, res) => {
 app.post("/signup", signupValidation, signup);
 app.post("/login", loginValidation, login);
 app.get("/isAuth", isAuthenticated,async(req:AuthRequest,res:Response)=>{
-  
-  res.status(200).json({message:"working notes",success:true, user:req.user})
+  res.status(200).json({message:"working notes",success:true})
 });
 
 app.post("/addnotes", isAuthenticated, async (req: AuthRequest, res: Response) => {
