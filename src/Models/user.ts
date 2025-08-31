@@ -3,7 +3,7 @@ import mongoose, { Document, Schema } from "mongoose";
 export interface IUser extends Document {
   name: string;
   email: string;
-  password: string;
+  password?: string; 
   notes: mongoose.Types.ObjectId[]; 
 }
 
@@ -26,7 +26,7 @@ const UserSchema: Schema = new Schema({
   },
   password: {
     type: String,
-    required: true, 
+    required: false,
   },
   notes: [
     {

@@ -7,6 +7,8 @@ import { signup, login } from "./Controllers/auth";
 import { isAuthenticated, AuthRequest } from "./middlewares/isAuth";
 import { User, Note } from "./Models/user";
 import cookieParser from "cookie-parser";
+import { OAuth2Client } from "google-auth-library";
+import jwt from "jsonwebtoken";
 import "./Models/db";
 
 
@@ -21,7 +23,7 @@ app.use(
     credentials: true,
   })
 );
-
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 app.get("/", (req, res) => {
   res.send("Hello, Rohit! 🚀 Server chal raha hai...");
@@ -99,6 +101,57 @@ app.delete('/notes/delete',isAuthenticated,async(req:AuthRequest,res:Response)=>
     }
 })
 
+app.post("/auth/google", async (req:AuthRequest, res: Response) => {
+  try {
+    const { gtoken } = req.body; 
+    const ticket = await client.verifyIdToken({
+      idToken: gtoken,
+      audience: process.env.GOOGLE_CLIENT_ID!,
+    });
+
+    const payload = ticket.getPayload();
+    if (!payload || !payload.email) {
+      return res.status(400).json({ message: "Invalid token",success:false });
+    }
+
+    const { email, name } = payload;
+    let user = await User.findOne({ email });
+    if (!user) {
+      user = await User.create({
+        email,
+        name,
+        password: "", 
+      });
+    }
+
+    const token = jwt.sign(
+      { email: user.email, _id: user._id },
+      process.env.JWT_SECRET!,
+      { expiresIn: "24h" }
+    );
+
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 24 * 60 * 60 * 1000,
+    });
+
+    return res.json({
+      message: "Login successful",
+      success: true,
+      email: user.email,
+      name: user.name,
+    });
+  } catch (error) {
+    console.error("Google auth error", error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+app.all(/.*/, (req:AuthRequest, res: Response) => {
+  res.status(404).json({message:"Page not found",})
+});
 
 app.listen(3000, () => {
   console.log("Server is working on port 3000");

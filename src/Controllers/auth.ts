@@ -23,7 +23,7 @@ export const signup = async (req: Request, res: Response) => {
 
     return res
       .status(201)
-      .json({ message: "Sign Up successful", success: true });
+      .json({ message: "Account created", success: true });
   } catch (error) {
     return res
       .status(500)
@@ -43,6 +43,13 @@ export const login = async (req: Request, res: Response) => {
         .json({ message: "User doesn't exist", success: false });
     }
 
+    if (!user.password) {
+      return res.status(400).json({
+        message: "Please login with Google.",
+        success: false,
+      });
+    }
+
     const isPassEqual = await bcrypt.compare(password, user.password);
     if (!isPassEqual) {
       return res
@@ -55,11 +62,12 @@ export const login = async (req: Request, res: Response) => {
       process.env.JWT_SECRET!,
       { expiresIn: "24h" }
     );
+    
     res.cookie("token", token, {
-      httpOnly: true,  
+      httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "strict", 
-      maxAge: 24 * 60 * 60 * 1000 
+      sameSite: "strict",
+      maxAge: 24 * 60 * 60 * 1000,
     });
 
     return res.status(200).json({
