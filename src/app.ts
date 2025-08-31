@@ -10,8 +10,6 @@ import cookieParser from "cookie-parser";
 import "./Models/db";
 
 
-
-
 const app = express();
 
 app.use(express.urlencoded({ extended: true }));
@@ -81,10 +79,25 @@ app.get("/notes", isAuthenticated, async (req: AuthRequest, res: Response) => {
     });
     
   } catch (error) {
-    console.error(error);
     res.status(500).json({ message: "Server error", success: false });
   }
 });
+
+app.delete('/notes/delete',isAuthenticated,async(req:AuthRequest,res:Response)=>{
+    try{
+      const {id} = req.body;
+      await User.findByIdAndUpdate(req.user._id,{$pull:{notes:id}})
+      await Note.findByIdAndDelete(id);
+      const userWithNotes = await User.findById(req.user._id).populate("notes");
+      return res.status(201).json({
+        message: "Note deleted",
+        success: true,
+        notes:userWithNotes?.notes,
+      });
+    }catch(error){
+        return res.status(500).json({message:"Internal server error",success:false})
+    }
+})
 
 
 app.listen(3000, () => {
