@@ -7,7 +7,6 @@
     "module": "commonjs",
     "target": "es2019",
     "esModuleInterop": true,
-    "types": ["node"],
 
     // Other Outputs
     "sourceMap": true,
