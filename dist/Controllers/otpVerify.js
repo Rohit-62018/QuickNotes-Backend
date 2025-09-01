@@ -40,4 +40,3 @@ const verifyOtp = async (req, res) => {
     }
 };
 exports.verifyOtp = verifyOtp;
-//# sourceMappingURL=otpVerify.js.map

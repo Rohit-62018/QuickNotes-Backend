@@ -3,24 +3,26 @@
     "rootDir": "./src",
     "outDir": "./dist",
 
-    // Environment Settings
+  
     "module": "commonjs",
-    "target": "es2019",
+    "target": "es2020",            
     "esModuleInterop": true,
+    "moduleResolution": "node",      
+    "resolveJsonModule": true,        
     "types": ["node"],
 
-    // Other Outputs
-    "sourceMap": true,
-    "declaration": true,
-    "declarationMap": true,
 
-    // Stricter Typechecking Options
+    "sourceMap": false,              
+    "declaration": false,             
+    "declarationMap": false,
+
     "noUncheckedIndexedAccess": true,
     "exactOptionalPropertyTypes": true,
 
-    // Recommended Options
     "strict": true,
     "skipLibCheck": true,
     "noImplicitAny": false
-  }
+  },
+  "include": ["src"],                
+  "exclude": ["node_modules", "dist"] 
 }

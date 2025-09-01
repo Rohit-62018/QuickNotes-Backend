@@ -6,8 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.isAuthenticated = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const isAuthenticated = (req, res, next) => {
-    var _a;
-    const token = (_a = req.cookies) === null || _a === void 0 ? void 0 : _a.token;
+    const token = req.cookies?.token;
     if (!token) {
         res.status(403).json({ message: "Unauthorized access", success: false });
         return;
@@ -23,4 +22,3 @@ const isAuthenticated = (req, res, next) => {
     }
 };
 exports.isAuthenticated = isAuthenticated;
-//# sourceMappingURL=isAuth.js.map

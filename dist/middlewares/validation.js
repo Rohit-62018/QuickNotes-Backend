@@ -34,4 +34,3 @@ const loginValidation = (req, res, next) => {
     next();
 };
 exports.loginValidation = loginValidation;
-//# sourceMappingURL=validation.js.map

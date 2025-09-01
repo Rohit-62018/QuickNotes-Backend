@@ -48,4 +48,3 @@ const authGoogel = async (req, res) => {
     }
 };
 exports.authGoogel = authGoogel;
-//# sourceMappingURL=authGoogle.js.map

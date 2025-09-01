@@ -17,7 +17,7 @@ const addnotes = async (req, res) => {
         return res.status(201).json({
             message: "Note created ",
             success: true,
-            notes: userWithNotes === null || userWithNotes === void 0 ? void 0 : userWithNotes.notes
+            notes: userWithNotes?.notes
         });
     }
     catch (error) {
@@ -35,7 +35,7 @@ const deleteNote = async (req, res) => {
         return res.status(201).json({
             message: "Note deleted",
             success: true,
-            notes: userWithNotes === null || userWithNotes === void 0 ? void 0 : userWithNotes.notes,
+            notes: userWithNotes?.notes,
         });
     }
     catch (error) {
@@ -50,9 +50,9 @@ const getnotes = async (req, res) => {
             message: "Note created ",
             success: true,
             user: {
-                notes: userWithNotes === null || userWithNotes === void 0 ? void 0 : userWithNotes.notes,
+                notes: userWithNotes?.notes,
                 email: req.user.email,
-                name: userWithNotes === null || userWithNotes === void 0 ? void 0 : userWithNotes.name
+                name: userWithNotes?.name
             }
         });
     }
@@ -61,4 +61,3 @@ const getnotes = async (req, res) => {
     }
 };
 exports.getnotes = getnotes;
-//# sourceMappingURL=notes.js.map

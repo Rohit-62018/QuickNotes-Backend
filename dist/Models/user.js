@@ -71,4 +71,3 @@ const User = mongoose_1.default.model("User", UserSchema);
 exports.User = User;
 const Note = mongoose_1.default.model("Note", NoteSchema);
 exports.Note = Note;
-//# sourceMappingURL=user.js.map
