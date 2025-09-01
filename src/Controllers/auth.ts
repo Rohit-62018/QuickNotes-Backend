@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { AuthRequest } from "../middlewares/isAuth";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import  { User }   from "../Models/user"; 
@@ -117,3 +118,12 @@ export const login = async (req: Request, res: Response) => {
       .json({ message: "Internal server error", success: false });
   }
 };
+
+export const logout = (req: AuthRequest, res: Response) => {
+  res.clearCookie("token", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "strict",
+  });
+  return res.status(200).json({ success: true, message: "Logged out successfully" });
+}
