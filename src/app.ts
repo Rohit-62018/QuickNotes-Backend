@@ -8,6 +8,7 @@ import { isAuthenticated, AuthRequest } from "./middlewares/isAuth";
 import { User, Note } from "./Models/user";
 import cookieParser from "cookie-parser";
 import { OAuth2Client } from "google-auth-library";
+import  { verifyOtp }  from './Controllers/otpVerify'
 import jwt from "jsonwebtoken";
 import "./Models/db";
 
@@ -148,6 +149,8 @@ app.post("/auth/google", async (req:AuthRequest, res: Response) => {
     return res.status(500).json({ message: "Internal server error" });
   }
 });
+
+app.post("/verify-otp",verifyOtp);
 
 app.all(/.*/, (req:AuthRequest, res: Response) => {
   res.status(404).json({message:"Page not found",})

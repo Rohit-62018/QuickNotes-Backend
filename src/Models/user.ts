@@ -3,15 +3,20 @@ import mongoose, { Document, Schema } from "mongoose";
 export interface IUser extends Document {
   name: string;
   email: string;
-  password?: string; 
-  notes: mongoose.Types.ObjectId[]; 
+  password?: string;
+  otp?: {
+    code: number;
+    verify: boolean;
+    otpExpires: number;
+  };
+  notes: mongoose.Types.ObjectId[];
 }
 
 const NoteSchema: Schema = new Schema({
   content: {
     type: String,
     required: true,
-  }
+  },
 });
 
 const UserSchema: Schema = new Schema({
@@ -28,11 +33,16 @@ const UserSchema: Schema = new Schema({
     type: String,
     required: false,
   },
+  otp: {
+    code: { type: Number },
+    verify: { type: Boolean, default: false },
+    otpExpires: { type: Number },
+  },
   notes: [
     {
       type: Schema.Types.ObjectId,
-      ref: "Note",  
-    }
+      ref: "Note",
+    },
   ],
 });
 
